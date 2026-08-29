@@ -1,0 +1,44 @@
+name: Build and push
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+env:
+  PROJECT_ID: streaming-pipeline-learn
+  REGION: europe-west4
+  REPOSITORY: cloud-run-images
+  IMAGE: receiver
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
+          service_account: ${{ vars.WIF_SERVICE_ACCOUNT }}
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${REGION}-docker.pkg.dev --quiet
+
+      - name: Set image tag
+        id: meta
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "tag=PR-${{ github.event.number }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=latest" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build and push
+        run: |
+          IMAGE_URI="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${IMAGE}"
+          docker build -t "${IMAGE_URI}:${{ steps.meta.outputs.tag }}" .
+          docker push "${IMAGE_URI}:${{ steps.meta.outputs.tag }}"

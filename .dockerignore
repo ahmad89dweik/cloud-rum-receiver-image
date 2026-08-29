@@ -1,0 +1,7 @@
+venv
+.git
+__pycache__
+*.pyc
+.DS_Store
+local-gcs
+.env
