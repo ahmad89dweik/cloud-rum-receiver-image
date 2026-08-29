@@ -1,17 +1,6 @@
-from app.config import settings
-
-
-def main() -> None:
-    if settings.app_mode == "job":
-        from app.job import main as job_main
-
-        job_main()
-        return
-
-    from app.receiver import main as receiver_main
-
-    receiver_main()
-
+import os
+import uvicorn
+from app.main import app
 
 if __name__ == "__main__":
-    main()
+    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", "8080")))
