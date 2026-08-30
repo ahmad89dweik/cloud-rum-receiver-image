@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/python:3.14.7-slim-bookworm
+FROM public.ecr.aws/docker/library/python:3.13-slim-bookworm
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
