@@ -4,13 +4,12 @@ Current scope: enrich and log. Publishing to Pub/Sub is not wired yet — that
 lands in ``app.messaging`` and gets called from here.
 """
 
-import json
 import logging
 import uuid
 from datetime import UTC, datetime
 
 from app.messaging.publisher import pub
-from app.messaging.envelope import envelope
+from app.messaging.envelope import build
 from app.observability.trace import current_trace
 from app.pipelines.exposures.schemas import ExposureEvent, SCHEMA_VERSION
 
@@ -32,7 +31,7 @@ def enrich(event: ExposureEvent, user_agent: str | None) -> dict:
 
 async def handle(event: ExposureEvent, user_agent: str | None) -> None:
     record = enrich(event, user_agent)
-    message = envelope.build(
+    message = build(
         record,
         event_type=EVENT_TYPE,
         schema_version=SCHEMA_VERSION,
