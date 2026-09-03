@@ -1,0 +1,12 @@
+venv
+.git
+.github
+terraform
+tests
+scripts
+__pycache__
+*.pyc
+.pytest_cache
+.DS_Store
+local-gcs
+.env
