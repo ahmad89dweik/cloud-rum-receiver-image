@@ -8,7 +8,7 @@ Logging is configured before uvicorn starts, or uvicorn's own handlers win.
 import uvicorn
 
 from app.observability.logging import configure_logging
-from app.settings import get_settings
+from app.core.settings import get_settings
 
 
 def run() -> None:
@@ -16,7 +16,8 @@ def run() -> None:
     configure_logging(project=settings.gcp_project, level=settings.log_level)
 
     uvicorn.run(
-        "app.main:app",
+        # app.application is the module name, app is the variable name for the FastAPI app
+        "app.application:app",
         host="0.0.0.0",
         port=settings.port,
         log_config=None,

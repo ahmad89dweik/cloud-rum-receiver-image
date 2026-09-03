@@ -11,13 +11,13 @@ router = APIRouter(tags=["health"])
 
 
 @router.get("/health")
-async def healthz() -> dict[str, str]:
+async def health() -> dict[str, str]:
     """Liveness — the process is up. Never touches dependencies."""
     return {"status": "ok"}
 
 
 @router.get("/ready")
-async def readyz() -> dict[str, str]:
+async def ready() -> dict[str, str]:
     """Readiness — safe to receive traffic.
 
     Nothing to check yet; gains a publisher check when Pub/Sub is wired.

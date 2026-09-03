@@ -18,7 +18,7 @@ _RESERVED = frozenset(
     "message",
     "asctime",
     "taskName",
-    "color_message",  # uvicorn attaches ANSI-coloured duplicates of its messages
+    "color_message",
 }
 
 
@@ -41,7 +41,6 @@ class CloudLoggingFormatter(logging.Formatter):
         if record.exc_info:
             payload["exception"] = self.formatException(record.exc_info)
 
-        # Anything passed via logger.info("...", extra={...}) lands at the top level.
         for key, value in record.__dict__.items():
             if key not in _RESERVED and not key.startswith("_"):
                 payload[key] = value

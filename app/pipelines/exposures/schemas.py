@@ -9,6 +9,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
 
+SCHEMA_VERSION = 1
 
 class ExposureEvent(BaseModel):
     model_config = ConfigDict(extra="allow")
